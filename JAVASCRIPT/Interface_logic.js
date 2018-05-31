@@ -1,4 +1,4 @@
-
+var productList = [];
 class Interface_logic_Product {
 
     drawTable() {
@@ -26,17 +26,26 @@ class Interface_logic_Product {
 
 
         document.getElementById('tableBody').appendChild(tbodyContet);
-
-
         this.resetForm();
+        this.showMessage('Product added successfully', 'success');
     }
     deleteProduct(element) {
 
         element.parentElement.parentElement.remove();
+        this.showMessage('Product deleted successfully', 'danger');
+        
 
     }
-    showMessage() {
-
+    showMessage(message,ccssStyle) {
+        var div = document.createElement('div');
+        div.className = `alert alert-${ccssStyle} mt-3`;
+        div.appendChild(document.createTextNode(message));
+        var container= document.querySelector('.container');
+        var app = document.querySelector('#App');
+        container.insertBefore(div,app);
+        setTimeout(function(){
+            document.querySelector('.alert').remove();
+        },2000);
     }
     saveInLocalStorage(productList) {
         localStorage.setItem('ProductList', JSON.stringify(productList));
@@ -56,19 +65,34 @@ class Interface_logic_Product {
 }
 var iu = new Interface_logic_Product();
 document.getElementById('btnAddProduct').addEventListener('click', function (e) {
+    var inputlist = [];
     var name = document.getElementById('Name').value;
     var price = document.getElementById('Price').value;
     var description = document.getElementById('Description').value;
-    var product = new Product(name, price, description);
-    e.preventDefault();
-    var productList = [];
-    productList.push(product);
-    var iu = new Interface_logic_Product();
-    iu.saveInLocalStorage(productList);
-    iu.drawTable(productList);
+    inputlist.push(name, price, description);
+    if (validateForm(inputlist) === false){
+        var product = new Product(name, price, description);
+        e.preventDefault();
+        productList.push(product);
+        var iu = new Interface_logic_Product();
+        iu.saveInLocalStorage(productList);
+        iu.drawTable(productList);
 
+    }
 
 });
 function deleteElement(event) {
     iu.deleteProduct(event);
+}
+function validateForm(inputlist) {
+    var result = false;
+
+    for (i = 0; i < inputlist.length; i++) {
+        if (inputlist[i].length === 0) {
+            result = true;
+        }
+
+    }
+
+    return result;
 }
