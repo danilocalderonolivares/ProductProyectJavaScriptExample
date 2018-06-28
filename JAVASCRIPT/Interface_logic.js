@@ -82,7 +82,23 @@ document.getElementById('btnAddProduct').addEventListener('click', function (e) 
 
 });
 function deleteElement(event) {
-    iu.deleteProduct(event);
+    
+     swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this product!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+        .then((willDelete) => {
+            if (willDelete) {
+                iu.deleteProduct(event);
+               
+            } else {
+                swal("Your product was not deleted!");
+            }
+        });
+
 }
 function validateForm(inputlist) {
     var result = false;
@@ -93,6 +109,6 @@ function validateForm(inputlist) {
         }
 
     }
-
     return result;
+
 }
