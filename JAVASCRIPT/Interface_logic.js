@@ -1,4 +1,4 @@
-var productList = [];
+    var productList = [];
 var cont = 0;
 
 class Interface_logic_Product {
